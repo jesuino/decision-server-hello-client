@@ -11,15 +11,17 @@ import org.apache.commons.io.IOUtils;
 import org.drools.core.command.impl.GenericCommand;
 import org.drools.core.command.runtime.BatchExecutionCommandImpl;
 import org.drools.core.command.runtime.rule.FireAllRulesCommand;
+import org.drools.core.command.runtime.rule.InsertObjectCommand;
 import org.junit.Test;
 import org.kie.api.command.BatchExecutionCommand;
+import org.kie.example.project1.Person;
 import org.kie.internal.runtime.helper.BatchExecutionHelper;
 
-public class DecisionServerHelloClient {
+public class DecisionServerHelloClientWithFact {
 
 	private static final String KIE_SERVER_USR = "jesuino";
 	private static final String KIE_SERVER_PSW = "redhat2014!";
-	private static final String HELLO_RULE_ENDPOINT = "http://localhost:8080/kie-server/services/rest/server/containers/hello";
+	private static final String HELLO_RULE_ENDPOINT = "http://localhost:8080/kie-server/services/rest/server/containers/approve";
 
 	
 	/**
@@ -28,8 +30,22 @@ public class DecisionServerHelloClient {
 	 * @throws Exception
 	 */
 	@Test
-	public void executeHelloCommand() throws Exception {	
+	public void executeHelloCommand() throws Exception {
+		Person p = new Person();
+		p.setName("William");
+		p.setProcessed(false);
+		p.setAge(21);
+		
+		Person p2 = new Person();
+		p2.setName("Levi");
+		p2.setProcessed(false);
+		p2.setAge(5);
+		
 		List<GenericCommand<?>> commands = new ArrayList<>();
+		// You can first add the facts in the memory
+		commands.add(new InsertObjectCommand(p));
+		commands.add(new InsertObjectCommand(p2));
+		// then execute this to only call fire all rules and comment the insert fact commands
 		commands.add(new FireAllRulesCommand());
 		BatchExecutionCommand cmd = new BatchExecutionCommandImpl(commands);
 		String cmdXML = BatchExecutionHelper.newXStreamMarshaller().toXML(cmd);

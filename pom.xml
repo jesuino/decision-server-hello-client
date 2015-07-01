@@ -49,6 +49,12 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 		</dependency>
+		<!-- The project on BRMS that contains my model object -->
+		<dependency>
+			<groupId>org.kie.example</groupId>
+			<artifactId>hello-fact</artifactId>
+			<version>1.0</version>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
